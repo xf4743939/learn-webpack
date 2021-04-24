@@ -1,0 +1,15 @@
+html,body{
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  background: pink;
+  
+}
+#title{
+  display: flex;
+  box-shadow: 0 1px 0 pink;
+  font-size: 14px;
+  color: #999;
+  backface-visibility: hidden;
+  background: url("./image/bg.jpg");
+}
