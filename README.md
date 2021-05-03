@@ -33,6 +33,7 @@ webpack 是一种前端资源构建工具，一个静态模块打包器(module b
   5. posscss-loader:给 css 添加兼容,
   6. eslint-loader:
 - Plugins
+  插件目的在于解决 loader 无法实现的其他事
   插件可以用于执行范围更广的任务,插件范围包括从打包优化和压缩，资源管理,注入环境变量。
   1. html-webpack-plugin:创建一个空的 HTML,自动引入打包输出的所有资源(js/css)
   2. mini-css-extract-plugin:会将 css 提取到单独的文件中,为每个包含 css 的 js 文件创建一个 css 文件,并支持 css 和 sourceMap 按需加载
@@ -45,14 +46,55 @@ webpack 是一种前端资源构建工具，一个静态模块打包器(module b
 ## webpack 性能优化
 
 - 开发环境性能优化
+
+1. 优化打包构建速度
+   > > HMR JS 默认时不支持
+2. 优化代码调试
+   source-map
+   > > source-map、inline-source-map、eval-source-map
+
 - 生产环境性能优化
 
-## 开发环境性能优化
+- 生产环境性能优化
 
 - 优化打包构建速度
-- 优化代码调试
 
-## 生成环境性能优化
+1. oneOf 同类型只用一个
+2. babel 缓存
+3. 多进程打包
+4. externals
+5. dll
 
-- 优化打包构建速度
 - 优化代码运行的性能
+
+1. 缓存(hash-chunkhash-contenthash)
+2. tree shaking(es6 和生产环境)
+3. code split
+4. 懒加载/预加载
+5. pwa
+
+## webpack 缓存
+
+- babel 缓存
+  cacheDirectory:true
+- 文件资源缓存
+  hash:每次 webpack 打包都会重新生成一个唯一的 Hash 值
+  问题:因为 js 和 css 同时使用一个 Hash 值(可能我只改动一个文件所有缓存都失效)
+  chunkHash:根据 chunk 生成的 hash 值,如果打包来源于一个 chunk,那么 hash 值就一样;js 和 css 的 hash 值还是一样的(因为 css 是在 js 中被引入的,所以同属于一个 chunk)
+  contenthash
+
+## tree shaking
+
+前提: 1.必须使用 ES6 模块化. 2.开启 production 环境
+
+## runtime
+
+主要是指:在浏览器运行过程中,webpack 用来连接模块化应用程序所需的所有代码。
+
+## manifest
+
+当 compiler 开始执行、解析和映射应用程序时，它会保留所有模块的详细要点。这个数据集合称为 "manifest"，当完成打包并发送到浏览器时，runtime 会通过 manifest 来解析和加载模块。无论你选择哪种 模块语法，那些 import 或 require 语句现在都已经转换为 **webpack_require** 方法，此方法指向模块标识符(module identifier)。通过使用 manifest 中的数据，runtime 将能够检索这些标识符，找出每个标识符背后对应的模块
+
+## 懒加载和预加载区别
+
+懒加载:当文件需要使用时才加载;预加载:会在使用之前,提前加载 js 文件(等其他资源加载完毕,浏览器空闲了再偷偷加载资源)
